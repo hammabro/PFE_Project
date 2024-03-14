@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import urllib.parse
 import re
 import pandas as pd
 import os.path
+from selenium.common.exceptions import NoSuchElementException
 
 driver = webdriver.Chrome()
 
@@ -43,6 +45,7 @@ for i in range(1, 201):
                 cylindree = "N/A"
                 puiss_fiscale = "N/A"
                 carrosserie = "N/A"
+                description="N/A"
 
                 if  car_soup.find('div').find('div',class_="h-[1px] w-full bg-gray-300 mt-7 mb-4 undefined") :  
                     criteres_div = car_soup.find('div').find('div',class_="h-[1px] w-full bg-gray-300 mt-7 mb-4 undefined").parent
@@ -63,9 +66,14 @@ for i in range(1, 201):
                             if titre=="Cylindrée" : cylindree=valeur
                             if titre=="Puissance fiscale" : puiss_fiscale=valeur
                             if titre=="Type de carrosserie" : carrosserie=valeur
-                
-                
-                data.append([marque, modele, etat,kilometrage ,carburant , boite, puiss_fiscale , carrosserie, cylindree, annee, price])
+                        try:
+                            description_element = driver.find_element(By.XPATH, '//*[@id="__next"]/div[4]/main/div[2]/div/div[4]')
+                            description = description_element.text
+                            print('fama description:', description)
+                        except NoSuchElementException:
+                            print('famech description: Description element not found')
+
+                data.append([marque, modele, etat,kilometrage ,carburant , boite, puiss_fiscale , carrosserie, cylindree, annee, price,description])
     print(f" page {i} succesfully scraped")
         
 
@@ -74,7 +82,7 @@ driver.quit()
 
 # Create DataFrame from the new data list
 df_new = pd.DataFrame(data, columns=['Marque', 'Modele', 'Etat', 'Kilometrage', 'Carburant',
-                                    'Boite Vitesse','Puissance Fiscale', 'Carrosseries', 'Cylindrée', 'Annee','Prix (à partir de)'])
+                                    'Boite Vitesse','Puissance Fiscale', 'Carrosseries', 'Cylindrée', 'Annee','Prix (à partir de)','description'])
 
 # Load existing data from the Excel file if it exists
 try:
@@ -92,7 +100,7 @@ try:
 
     # Remove duplicates based on the columns you want to consider for uniqueness
     df_combined.drop_duplicates(subset=['Marque', 'Modele', 'Etat', 'Kilometrage', 'Carburant',
-                                    'Boite Vitesse','Puissance Fiscale', 'Carrosseries', 'Cylindrée', 'Annee','Prix (à partir de)'],
+                                    'Boite Vitesse','Puissance Fiscale', 'Carrosseries', 'Cylindrée', 'Annee','Prix (à partir de)','description'],
                                 inplace=True)
 
     # Save the combined data to the Excel file

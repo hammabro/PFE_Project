@@ -96,7 +96,6 @@ while check == 0 :
                      cylindrée.strip(), couleur_ext.strip(), couleur_int.strip(), sellerie.strip(), nbre_places.strip(),
                      nbre_portes.strip(), marque.strip(), modele.strip(), price.strip()])
     print('wfe l traitement')
-    time.sleep(2)
     pages_div= soup.find('div', class_='pages')
     if pages_div.find('li', class_='page-item next disabled') : 
         print('last page')
