@@ -28,7 +28,7 @@ while check == 0 :
         full_link = urllib.parse.urljoin(base_url, link)
         thumb_cap = occasion.find('div', class_='thumb-caption')
         price_div = occasion.find('div', class_='item-foot')
-        name = thumb_cap.find('h2').text
+        # name = thumb_cap.find('h2').text
         price = price_div.find('div', class_='price').text
 
         driver.get(full_link)
@@ -91,7 +91,7 @@ while check == 0 :
         cylindrée = cyl_content
 
         # Append data to list
-        data.append([name.strip(), nature , Kilométrage.strip(), Mise_en_circulation.strip(), Énergie.strip(), Boite_vitesse.strip(),
+        data.append([nature , Kilométrage.strip(), Mise_en_circulation.strip(), Énergie.strip(), Boite_vitesse.strip(),
                      Puissance_fiscale.strip(), Transmission.strip(), Carrosserie.strip(), Date_de_l_annonce.strip(),
                      cylindrée.strip(), couleur_ext.strip(), couleur_int.strip(), sellerie.strip(), nbre_places.strip(),
                      nbre_portes.strip(), marque.strip(), modele.strip(), price.strip()])
@@ -114,7 +114,7 @@ while check == 0 :
 driver.quit()
 
 # Create DataFrame from the new data list
-df_new = pd.DataFrame(data, columns=['Nom de la voiture','nature' , 'Kilométrage', 'Mise en circulation', 'Énergie', 'Boite vitesse', 'Puissance fiscale',
+df_new = pd.DataFrame(data, columns=['nature' , 'Kilométrage', 'Mise en circulation', 'Énergie', 'Boite vitesse', 'Puissance fiscale',
                                  'Transmission', 'Carosseries', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
                                  'Nombre de places', 'Nombre de portes', 'Marque', 'Modèle', 'Prix'])
 
@@ -124,7 +124,7 @@ try:
     # Concatenate old and new data
     df_combined = pd.concat([df_old, df_new], ignore_index=True)
     # Remove duplicates based on the columns you want to consider for uniqueness
-    df_combined.drop_duplicates(subset=['Nom de la voiture', 'Kilométrage', 'Mise en circulation', 'Énergie', 'Boite vitesse', 'Puissance fiscale',
+    df_combined.drop_duplicates(subset=['nature','Kilométrage', 'Mise en circulation', 'Énergie', 'Boite vitesse', 'Puissance fiscale',
                                  'Transmission', 'Carosseries', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
                                  'Nombre de places', 'Nombre de portes', 'Marque', 'Modèle', 'Prix'], inplace=True)
     # Save the combined data to the Excel file
