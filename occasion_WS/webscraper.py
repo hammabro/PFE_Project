@@ -18,6 +18,7 @@ data = []
 
 elements = driver.find_elements(By.CLASS_NAME, "page-item next disabled")
 check = 0
+i=0
 while check == 0 :
     occasions = soup.find_all('div', class_='occasion-item-v2')
 
@@ -102,11 +103,14 @@ while check == 0 :
         check=1
     else :     
         print('mezelna mouch fel last page ')
+        if i==10 :
+            check=1
         nextBtn_link = pages_div.find('li', class_='page-item next').find('a')['href']
         next_link = urllib.parse.urljoin(base_url,nextBtn_link)
         driver.get(next_link)
         next_html = driver.page_source
         soup = BeautifulSoup(next_html, 'lxml')
+        i+=1
 
 
 
@@ -114,8 +118,8 @@ while check == 0 :
 driver.quit()
 
 # Create DataFrame from the new data list
-df_new = pd.DataFrame(data, columns=['nature' , 'Kilométrage', 'Mise en circulation', 'Énergie', 'Boite vitesse', 'Puissance fiscale',
-                                 'Transmission', 'Carosseries', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
+df_new = pd.DataFrame(data, columns=['Nature' , 'Kilométrage', 'Mise en circulation', 'Carburant', 'Boite Vitesse', 'Puissance Fiscale',
+                                 'Transmission', 'Carrosserie', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
                                  'Nombre de places', 'Nombre de portes', 'Marque', 'Modèle', 'Prix'])
 
 # Load existing data from the Excel file if it exists
@@ -124,8 +128,8 @@ try:
     # Concatenate old and new data
     df_combined = pd.concat([df_old, df_new], ignore_index=True)
     # Remove duplicates based on the columns you want to consider for uniqueness
-    df_combined.drop_duplicates(subset=['nature','Kilométrage', 'Mise en circulation', 'Énergie', 'Boite vitesse', 'Puissance fiscale',
-                                 'Transmission', 'Carosseries', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
+    df_combined.drop_duplicates(subset=['Nature','Kilométrage', 'Mise en circulation', 'Carburant', 'Boite Vitesse', 'Puissance Fiscale',
+                                 'Transmission', 'Carrosserie', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
                                  'Nombre de places', 'Nombre de portes', 'Marque', 'Modèle', 'Prix'], inplace=True)
     # Save the combined data to the Excel file
     df_combined.to_excel('car_data.xlsx', index=False)

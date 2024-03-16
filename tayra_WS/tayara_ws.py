@@ -81,8 +81,8 @@ for i in range(1, 201):
 driver.quit()
 
 # Create DataFrame from the new data list
-df_new = pd.DataFrame(data, columns=['Marque', 'Modele', 'Etat', 'Kilometrage', 'Carburant',
-                                    'Boite Vitesse','Puissance Fiscale', 'Carrosseries', 'Cylindrée', 'Annee','Prix (à partir de)','description'])
+df_new = pd.DataFrame(data, columns=['Marque', 'Modèle', 'Etat', 'Kilométrage', 'Carburant',
+                                    'Boite Vitesse','Puissance Fiscale', 'Carrosserie', 'Cylindrée', 'Année','Prix','description'])
 
 # Load existing data from the Excel file if it exists
 try:
@@ -99,8 +99,8 @@ try:
     df_combined = pd.concat([df_old, df_new], ignore_index=True)
 
     # Remove duplicates based on the columns you want to consider for uniqueness
-    df_combined.drop_duplicates(subset=['Marque', 'Modele', 'Etat', 'Kilometrage', 'Carburant',
-                                    'Boite Vitesse','Puissance Fiscale', 'Carrosseries', 'Cylindrée', 'Annee','Prix (à partir de)','description'],
+    df_combined.drop_duplicates(subset=['Marque', 'Modèle', 'Etat', 'Kilométrage', 'Carburant',
+                                    'Boite Vitesse','Puissance Fiscale', 'Carrosserie', 'Cylindrée', 'Année','Prix','description'],
                                 inplace=True)
 
     # Save the combined data to the Excel file
