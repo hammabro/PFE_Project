@@ -18,7 +18,6 @@ data = []
 
 elements = driver.find_elements(By.CLASS_NAME, "page-item next disabled")
 check = 0
-i=0
 while check == 0 :
     occasions = soup.find_all('div', class_='occasion-item-v2')
 
@@ -103,14 +102,12 @@ while check == 0 :
         check=1
     else :     
         print('mezelna mouch fel last page ')
-        if i==10 :
-            check=1
         nextBtn_link = pages_div.find('li', class_='page-item next').find('a')['href']
         next_link = urllib.parse.urljoin(base_url,nextBtn_link)
         driver.get(next_link)
         next_html = driver.page_source
         soup = BeautifulSoup(next_html, 'lxml')
-        i+=1
+    
 
 
 
