@@ -15,7 +15,7 @@ html = driver.page_source
 soup = BeautifulSoup(html, 'lxml')
 
 data = []
-
+i=1
 elements = driver.find_elements(By.CLASS_NAME, "page-item next disabled")
 check = 0
 while check == 0 :
@@ -28,7 +28,6 @@ while check == 0 :
         full_link = urllib.parse.urljoin(base_url, link)
         thumb_cap = occasion.find('div', class_='thumb-caption')
         price_div = occasion.find('div', class_='item-foot')
-        # name = thumb_cap.find('h2').text
         price = price_div.find('div', class_='price').text
 
         driver.get(full_link)
@@ -95,7 +94,8 @@ while check == 0 :
                      Puissance_fiscale.strip(), Transmission.strip(), Carrosserie.strip(), Date_de_l_annonce.strip(),
                      cylindrée.strip(), couleur_ext.strip(), couleur_int.strip(), sellerie.strip(), nbre_places.strip(),
                      nbre_portes.strip(), marque.strip(), modele.strip(), price.strip()])
-    print('wfe l traitement')
+    print('page ',i,' succesfully scraped')
+    i+=1
     pages_div= soup.find('div', class_='pages')
     if pages_div.find('li', class_='page-item next disabled') : 
         print('last page')
@@ -121,7 +121,7 @@ df_new = pd.DataFrame(data, columns=['Nature' , 'Kilométrage', 'Mise en circula
 
 # Load existing data from the Excel file if it exists
 try:
-    df_old = pd.read_excel('car_data.xlsx',engine='openpyxl')
+    df_old = pd.read_excel('automobile_car_data_v2.xlsx',engine='openpyxl')
     # Concatenate old and new data
     df_combined = pd.concat([df_old, df_new], ignore_index=True)
     # Remove duplicates based on the columns you want to consider for uniqueness
@@ -129,9 +129,9 @@ try:
                                  'Transmission', 'Carrosserie', 'Date annonce', 'Cylindrée', 'Couleur exterieure', 'Couleur interieure', 'Sellerie',
                                  'Nombre de places', 'Nombre de portes', 'Marque', 'Modèle', 'Prix'], inplace=True)
     # Save the combined data to the Excel file
-    df_combined.to_excel('car_data.xlsx', index=False)
+    df_combined.to_excel('automobile_car_data_v2.xlsx', index=False)
     print("New data added to the existing file.")
 except FileNotFoundError:
     # If the file doesn't exist, save the new data directly
-    df_new.to_excel('car_data.xlsx', index=False)
+    df_new.to_excel('automobile_car_data_v2.xlsx', index=False)
     print("New file created with the fetched data.")

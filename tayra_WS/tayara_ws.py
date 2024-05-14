@@ -34,7 +34,7 @@ for i in range(1, 201):
                 driver.get(car_full_link)
                 car_html = driver.page_source
                 car_soup = BeautifulSoup(car_html, 'lxml')
-                kilometrage = "http:N/A"
+                kilometrage = "N/A"
                 couleur = "N/A"
                 etat = "N/A"
                 boite = "N/A"
@@ -88,8 +88,7 @@ df_new = pd.DataFrame(data, columns=['Marque', 'Modèle', 'Etat', 'Kilométrage'
 # Load existing data from the Excel file if it exists
 try:
     # Check if the file exists
-    # Check if the file exists
-    if os.path.isfile('Tayara_car_data.xlsx'):
+    if os.path.isfile('Tayara_car_data_v2.xlsx'):
         # Load existing data from the Excel file
         df_old = pd.read_excel('Tayara_car_data.xlsx', engine='openpyxl')
     else:
@@ -105,9 +104,12 @@ try:
                                 inplace=True)
 
     # Save the combined data to the Excel file
-    df_combined.to_excel('Tayara_car_data.xlsx', index=False)
+    df_combined.to_excel('Tayara_car_data_v2.xlsx', index=False)
     print("New data added to the existing file.")
 except FileNotFoundError:
     # If the file doesn't exist, save the new data directly
-    df_new.to_excel('Tayara_car_data.xlsx', index=False)
+    df_new.drop_duplicates(subset=['Marque', 'Modèle', 'Etat', 'Kilométrage', 'Carburant',
+                                    'Boite Vitesse','Puissance Fiscale', 'Carrosserie', 'Cylindrée', 'Année','Prix','description'],
+                                inplace=True)
+    df_new.to_excel('Tayara_car_data_v2.xlsx', index=False)
     print("New file created with the fetched data.")

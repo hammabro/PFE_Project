@@ -2,8 +2,8 @@ import pandas as pd
 
 # Load data from the Excel files
 try:
-    df_tayara = pd.read_excel('Tayara_car_data.xlsx', engine='openpyxl')
-    df_automobile = pd.read_excel('car_data.xlsx', engine='openpyxl')
+    df_tayara = pd.read_excel('Tayara_car_data_v2.xlsx', engine='openpyxl')
+    df_automobile = pd.read_excel('automobile_car_data_v2.xlsx', engine='openpyxl')
 except FileNotFoundError:
     print("One or both files not found.")
     exit()
@@ -41,6 +41,6 @@ df_automobile_unique['Puissance Fiscale'] = df_automobile_unique['Puissance Fisc
 df_unified = pd.concat([df_tayara_unique, df_automobile_unique], ignore_index=True)
 
 # Save the unified dataframe to a new Excel file
-df_unified.to_excel('unified_car_data.xlsx', index=False)
+df_unified.to_excel('unified_car_data_v2.xlsx', index=False)
 
 print("Unified database created and saved.")
